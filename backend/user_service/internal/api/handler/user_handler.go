@@ -5,70 +5,71 @@ import (
 	"net/http"
 	"strconv"
 	"github.com/Quszlet/user_service/internal/models"
-	"github.com/Quszlet/user_service/pkg/json"
+	"github.com/Quszlet/user_service/pkg"
 	"github.com/gorilla/mux"
 )
 
-func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
+
+func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	user := models.User{}
-	err := json.Parse(r, user)
+	err := json.Parse(r, &user)
 	if err != nil {
-		JSON.ErrorResponse(w, http.StatusBadRequest, err.Error(), "Failed parse JSON")
+		json.ErrorResponse(w, http.StatusBadRequest, err.Error(), "Failed parse JSON")
 		return
 	}
 
 	err = user.Validate()
 	if err != nil {
-		JSON.ErrorResponse(w, http.StatusBadRequest, err.Error(), "Invalid JSON")
+		json.ErrorResponse(w, http.StatusBadRequest, err.Error(), "Invalid JSON")
 		return
 	}
 
-	id, err := h.services.Create(user)
+	id, err := h.services.User.Create(user)
 	if err != nil {
-		JSON.ErrorResponse(w, http.StatusInternalServerError, err.Error(), "Failed created user")
+		json.ErrorResponse(w, http.StatusInternalServerError, err.Error(), "Failed created user")
 		return
 	}
 
 	message := fmt.Sprintf("User created with id %d", id)
 
-	JSON.Response(w, http.StatusCreated, message)
+	json.Response(w, http.StatusCreated, message)
 }
 
 // Подумать как обновлять поля, которые указаны в JSON
-func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	//id, _ := strconv.Atoi(mux.Vars(r)["id"])
 }
 
-func (h *Handler) Get(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetUser(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(mux.Vars(r)["id"])
-	user, err := h.services.Get(id)
+	user, err := h.services.User.Get(id)
 	if err != nil {
-		JSON.ErrorResponse(w, http.StatusInternalServerError, err.Error(), "Failed get user")
+		json.ErrorResponse(w, http.StatusInternalServerError, err.Error(), "Failed get user")
 		return
 	}
 
-	JSON.Response(w, http.StatusCreated, user)
+	json.Response(w, http.StatusCreated, user)
 }
 
-func (h *Handler) GetAll(w http.ResponseWriter, r *http.Request) {
-	users, err := h.services.GetAll()
+func (h *Handler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	users, err := h.services.User.GetAll()
 	if err != nil {
-		JSON.ErrorResponse(w, http.StatusInternalServerError, err.Error(), "Failed get users")
+		json.ErrorResponse(w, http.StatusInternalServerError, err.Error(), "Failed get users")
 		return
 	}
 
-	JSON.Response(w, http.StatusCreated, users)
+	json.Response(w, http.StatusCreated, users)
 }
 
-func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(mux.Vars(r)["id"])
-	err := h.services.Delete(id)
+	err := h.services.User.Delete(id)
 	if err != nil {
-		JSON.ErrorResponse(w, http.StatusInternalServerError, err.Error(), "Failed delete user")
+		json.ErrorResponse(w, http.StatusInternalServerError, err.Error(), "Failed delete user")
 		return
 	}
 
 	message := fmt.Sprintf("User delete with id %d", id)
 	
-	JSON.Response(w, http.StatusCreated, message)
+	json.Response(w, http.StatusCreated, message)
 }

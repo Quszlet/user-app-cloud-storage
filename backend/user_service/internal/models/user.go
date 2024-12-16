@@ -5,17 +5,16 @@ import (
 )
 
 type User struct {
-	Id       uint   `json:"id"`
-	Login    string `json:"name"`
-	Password string `json:"password"`
-	Email    string `json:"email"`
-	Status   string `json:"status"`
+	Id        uint   `json:"id"`
+	Login     string `json:"login"`
+	Password  string `json:"password"`
+	Email     string `json:"email"`
+	Is_banned bool   `json:"is_banned"`
 }
 
 func (u User) Validate() error {
 	return validation.ValidateStruct(&u,
 		validation.Field(&u.Login, validation.Required),
 		validation.Field(&u.Email, validation.Required),
-		validation.Field(&u.Password, validation.Required),
-		validation.Field(&u.Status, validation.Required))
+		validation.Field(&u.Password, validation.Required))
 }

@@ -30,7 +30,6 @@ func NewMySqlDB(cfg Config) (*sqlx.DB, error) {
 	if err != nil {
 		log.Fatalln("Error connecting to the database:", err)
 	}
-	defer db.Close() // Обратить внимание при работе
 
 	err = db.Ping()
 	if err != nil {

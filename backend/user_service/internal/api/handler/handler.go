@@ -17,10 +17,10 @@ func (h *Handler) InitRoutes() *mux.Router {
 	r := mux.NewRouter()
 
 	users := r.PathPrefix("/users").Subrouter()
-	users.HandleFunc("/create", h.Create).Methods("POST")
-	users.HandleFunc("/update/{id:[0-9]+}", h.Update).Methods("UPDATE")
-	users.HandleFunc("/{id:[0-9]+}", h.Get).Methods("GET")
-	users.HandleFunc("", h.GetAll).Methods("GET")
-	users.HandleFunc("/delete/{id:[0-9]+}", h.Delete).Methods("DELETE")
+	users.HandleFunc("/create", h.CreateUser).Methods("POST")
+	users.HandleFunc("/update/{id:[0-9]+}", h.UpdateUser).Methods("UPDATE")
+	users.HandleFunc("/{id:[0-9]+}", h.GetUser).Methods("GET")
+	users.HandleFunc("", h.GetAllUsers).Methods("GET")
+	users.HandleFunc("/delete/{id:[0-9]+}", h.DeleteUser).Methods("DELETE")
 	return r
 }
