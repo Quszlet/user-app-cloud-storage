@@ -1,4 +1,4 @@
-package JSON
+package json
 
 import (
 	"encoding/json"
@@ -9,7 +9,6 @@ import (
 func Parse(r *http.Request, data interface{}) error {
 	return json.NewDecoder(r.Body).Decode(&data)
 }
-
 
 func ErrorResponse(w http.ResponseWriter, status int, err string, message string) {
 	errMessage := fmt.Sprintf("%s. %s", message, err)

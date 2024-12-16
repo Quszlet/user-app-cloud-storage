@@ -18,5 +18,5 @@ type Repository struct {
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
-	return &Repository{User: NewUserPostgres(db)}
+	return &Repository{User: NewUserMySql(db)}
 }
