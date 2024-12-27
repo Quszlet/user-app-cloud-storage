@@ -1,0 +1,111 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: user_app_cloude_storage
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - app_network
+    healthcheck:
+        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+        timeout: 20s
+        retries: 10
+
+  user_service:
+    build:
+      context: ./user_service
+      dockerfile: Dockerfile
+    container_name: user_service
+    ports:
+      - "8010:8010"
+    depends_on:
+      db: 
+        condition: service_healthy
+    environment:
+      PORT: :8010
+      USER_DB: root
+      PASSWORD_DB: root
+      NET_DB: tcp
+      ADDRESS_DB: db
+      PORT_DB: 3306
+      NAME_DB: user_app_cloude_storage
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8010/health"]
+      interval: 30s
+      timeout: 20s
+      retries: 5
+      start_period: 60s
+    networks:
+      - app_network
+
+  file_system_service:
+    build:
+      context: ./file_system_service
+      dockerfile: Dockerfile
+    container_name: file_system_service
+    ports:
+      - "8020:8020"
+    depends_on:
+      db: 
+        condition: service_healthy
+      user_service:
+        condition: service_healthy
+    environment:
+      PORT: :8020
+      USER_DB: root
+      PASSWORD_DB: root
+      NET_DB: tcp
+      ADDRESS_DB: db
+      PORT_DB: 3306
+      NAME_DB: user_app_cloude_storage
+    networks:
+      - app_network
+
+  authentication_service:
+    build:
+      context: ./authentication_service
+      dockerfile: Dockerfile
+    container_name: authentication_service
+    ports:
+      - "8030:8030"
+    environment:
+      PORT: :8030
+    depends_on:
+      user_service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8030/health"]
+      interval: 30s
+      timeout: 20s
+      retries: 5
+      start_period: 60s
+    networks:
+      - app_network
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    container_name: gateway
+    ports:
+      - "8040:8040"
+    environment:
+      PORT: :8040
+    depends_on:
+      authentication_service:
+        condition: service_healthy
+    networks:
+      - app_network
+
+volumes:
+  db_data: {}
+
+networks:
+  app_network:
+    driver: bridge

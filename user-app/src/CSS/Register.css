@@ -1,0 +1,102 @@
+/* Основные стили для страницы регистрации */
+
+.header {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 2px solid #0056b3;
+  }
+  
+  .header h1 {
+    margin: 0;
+  }
+  
+  .register-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .register-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding-bottom: 8px;
+    padding-top: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  .input-error {
+    border-color: red;
+  }
+  
+  .error-text {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+  }
+  
+  .register-error {
+    color: red;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  
+  button {
+    width: 100%;
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background: #0056b3;
+  }
+  
+  button:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  /* Дополнительные стили для мобильных устройств */
+  @media (max-width: 480px) {
+    .register-container {
+      padding: 15px;
+    }
+  
+    .register-form h2 {
+      font-size: 20px;
+    }
+  
+    button {
+      font-size: 14px;
+    }
+  }
+  
